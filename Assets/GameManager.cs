@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public GameObject winPanel;
     public GameObject lostPanel;
+    public GameObject loadingPanel;
     public float TimeSet;
     public int Min;
     public int addZero;
@@ -62,6 +63,15 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         winPanel.SetActive(true);
+    }
+
+    public void SetNextLevel()
+    {
+        Time.timeScale = 0;
+        // Cursor.lockState = CursorLockMode.None;
+        // Cursor.visible = true;
+        loadingPanel.SetActive(true);
+        SceneManager.LoadScene("SampleScene");
     }
 
 }

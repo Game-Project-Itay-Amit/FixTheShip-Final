@@ -8,6 +8,7 @@ TagManager:
   - false
   - true
   - Enemy
+  - Floor
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Player
   - Bullet
   - PostProccesing
-  - 
+  - Player
   - 
   - 
   - 

@@ -24,25 +24,42 @@ public class EnemyAiTutorial : MonoBehaviour
     public GameObject projectile;
     public GameObject ShotPos;
 
+    public GameObject EnemyGun;
+
     //States
     public float sightRange, attackRange;
-    public bool playerInSightRange, playerInAttackRange;
+    public bool playerInSightRange, playerInAttackRange, isAlive;
+    private NavMeshAgent n;
 
     private void Awake()
     {
+        n = GetComponent<NavMeshAgent>();
+        Animator animator = GetComponent<Animator>();
+        animator.SetBool("isAlive", true);
+        isAlive = true;
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
     }
 
     private void Update()
     {
-        //Check for sight and attack range
-        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+        if(isAlive){
+            //Check for sight and attack range
+            playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
+            playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-        if (!playerInSightRange && !playerInAttackRange) Patroling();
-        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-        if (playerInAttackRange && playerInSightRange) AttackPlayer();
+            if (!playerInSightRange && !playerInAttackRange) Patroling();
+            if (playerInSightRange && !playerInAttackRange) ChasePlayer();
+            if (playerInAttackRange && playerInSightRange) AttackPlayer();
+        }
+        else{
+            // n.velocity = new Vector3(0,0,0);
+            Debug.Log("Entered Log when dead");
+            // transform.position();
+            n.isStopped = true;
+            n.velocity = Vector3.zero;
+            return;
+        }
     }
 
     private void Patroling()
@@ -61,8 +78,8 @@ public class EnemyAiTutorial : MonoBehaviour
     private void SearchWalkPoint()
     {
         //Calculate random point in range
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
+        float randomZ = UnityEngine.Random.Range(-walkPointRange, walkPointRange);
+        float randomX = UnityEngine.Random.Range(-walkPointRange, walkPointRange);
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
@@ -129,11 +146,21 @@ public class EnemyAiTutorial : MonoBehaviour
 
         if (health <= 0)
         {
+            
             Invoke(nameof(DestroyEnemy), 0.5f);
         }
     }
     private void DestroyEnemy()
     {
+        isAlive = false;
+        Animator animator = GetComponent<Animator>();
+        animator.SetBool("isAlive", false);
+        // StartCoroutine(Coroutine(2));
+        
+        // GetComponent<Rigidbody>().freezeRotation = true;
+        // GetComponent<Rigidbody>().position = ;
+        EnemyGun.SetActive(false);
+        // StartCoroutine(Coroutine());
         Destroy(gameObject);
     }
 
@@ -144,4 +171,10 @@ public class EnemyAiTutorial : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sightRange);
     }
+
+    // IEnumerator Coroutine(){
+        
+    //     // yield return new WaitForSecondsRealtime(10);
+    //     Destroy(gameObject);
+    // }
 }

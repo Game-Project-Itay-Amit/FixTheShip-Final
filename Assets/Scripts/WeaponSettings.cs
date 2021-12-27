@@ -39,12 +39,12 @@ public class WeaponSettings : MonoBehaviour
 
     public void Shoot ()
     {
-        Quaternion quatEul = Quaternion.Euler(180, 0, 0);
+        Quaternion quatEul = Quaternion.Euler(90, 0, 0);
         GameObject bullet = Instantiate(bulletPrefab, bulletPlaceFiring.transform.position, quatEul);
         Vector3 ScaleBullet = new Vector3(0.1f, 0.1f, 0.1f);
         bullet.transform.localScale = ScaleBullet;
         Rigidbody rbBullet = bullet.GetComponent<Rigidbody>();
-        rbBullet.AddForce(transform.forward * 30f, ForceMode.Impulse);
+        rbBullet.AddForce(transform.forward * 90f, ForceMode.Impulse);
         bulletNum--;
         ammo.text = "Ammo :  " + bulletNum;
 
